@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-dpl
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      run: prometheus
+  template:
+    metadata:
+      labels:
+        run: prometheus
+    spec:
+      containers:
+      - name: prom
+        image: prom/prometheus
+
+
+        ports:
+        - containerPort: 9090
+
+
+        volumeMounts:
+        - name: prometheus-volume
+          mountPath: /data
+      volumes:
+      - name: prometheus-volume
+        persistentVolumeClaim:
+          claimName: pvc-prometheus
